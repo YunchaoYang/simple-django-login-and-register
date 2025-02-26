@@ -10,6 +10,17 @@
 
         {% csrf_token %}
         {% bootstrap_form form %}
+        
+        <!-- Terms and Conditions Checkbox -->
+        <!-- <div class="form-group">
+            <div class="form-check">
+                {{ form.agree_to_terms }}
+                <label class="form-check-label">
+                    {% translate "I agree to the" %} 
+                    <a href="{% url 'accounts:terms' %}" target="_blank">{% translate "terms and conditions" %}</a>
+                </label>
+            </div>
+        </div> -->
 
         <button class="btn btn-success">{% translate 'Create' %}</button>
 

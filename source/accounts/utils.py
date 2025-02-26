@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 def send_mail(to, template, context):
+
     html_content = render_to_string(f"accounts/emails/{template}.html", context)
     text_content = render_to_string(f"accounts/emails/{template}.txt", context)
 
@@ -15,6 +16,7 @@ def send_mail(to, template, context):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+    print("Email sent successfully")
 
 def send_activation_email(request, email, code):
     context = {
@@ -23,6 +25,8 @@ def send_activation_email(request, email, code):
             reverse("accounts:activate", kwargs={"code": code})
         ),
     }
+
+    print("send activation email", context, email)
 
     send_mail(email, "activate_profile", context)
 

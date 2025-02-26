@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from .views import (
     ActivateView,
@@ -15,6 +16,7 @@ from .views import (
     RestorePasswordDoneView,
     RestorePasswordView,
     SignUpView,
+    TermsAndConditionsView,
 )
 
 app_name = "accounts"
@@ -50,4 +52,5 @@ urlpatterns = [
         ChangeEmailActivateView.as_view(),
         name="change_email_activation",
     ),
+    path("terms/", TermsAndConditionsView.as_view(), name="terms"),
 ]

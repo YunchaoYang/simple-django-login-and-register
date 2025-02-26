@@ -63,10 +63,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "app.wsgi.application"
 
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 EMAIL_FILE_PATH = CONTENT_DIR / "tmp" / "emails"
-EMAIL_HOST_USER = "test@example.com"
-DEFAULT_FROM_EMAIL = "test@example.com"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "testinforna@gmail.com" # test_inforna123
+EMAIL_HOST_PASSWORD = "nrqk upvr bxlv tzdr"
+DEFAULT_FROM_EMAIL = "testinforna@gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+
+
 
 DATABASES = {
     "default": {
@@ -110,7 +120,7 @@ SIGN_UP_FIELDS = [
     "password2",
 ]
 if DISABLE_USERNAME:
-    SIGN_UP_FIELDS = ["first_name", "last_name", "email", "password1", "password2"]
+    SIGN_UP_FIELDS = ["first_name", "last_name", "email", "password1", "password2",]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 

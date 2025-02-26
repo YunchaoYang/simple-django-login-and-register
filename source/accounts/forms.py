@@ -8,7 +8,11 @@ from django.db.models import Q
 from django.forms import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
 
+from django.utils.safestring import mark_safe
+from django.core.mail import send_mail
 
 class UserCacheMixin:
     user_cache = None
@@ -127,7 +131,18 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         label=_("Email"), help_text=_("Required. Enter an existing email address.")
     )
-
+    agree_to_terms = forms.BooleanField(
+        required=True,
+        label=mark_safe('I agree to the <a href="/accounts/terms/" target="_blank">terms and conditions</a>'),
+        error_messages={'required': "You must agree to the terms and conditions to proceed."}
+    )    
+    def save(self, commit=True):
+        user = super(SignUpForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+    
     def clean_email(self):
         email = self.cleaned_data["email"]
 
@@ -136,6 +151,13 @@ class SignUpForm(UserCreationForm):
             raise ValidationError(_("You can not use this email address."))
 
         return email
+
+    def send_welcome_email(self, user):
+        subject = "Welcome to Our Site"
+        message = "Thank you for registering at our site."
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [user.email]
+        send_mail(subject, message, from_email, recipient_list)
 
 
 class ResendActivationCodeForm(UserCacheMixin, forms.Form):
@@ -239,3 +261,18 @@ class ChangeEmailForm(forms.Form):
 
 class RemindUsernameForm(EmailForm):
     pass
+
+
+def sign_up(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect("index")
+    else:
+        form = SignUpForm()
+    return render(request, "accounts/sign_up.html", {"form": form})

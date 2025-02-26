@@ -376,3 +376,6 @@ class LogOutConfirmView(LoginRequiredMixin, TemplateView):
 
 class LogOutView(LoginRequiredMixin, BaseLogoutView):
     template_name = "accounts/log_out.html"
+
+class TermsAndConditionsView(TemplateView):
+    template_name = "accounts/terms.html"
