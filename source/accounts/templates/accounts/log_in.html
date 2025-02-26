@@ -10,7 +10,9 @@
 
         {% csrf_token %}
         {% bootstrap_form form %}
-
+        <div class="mb-3">
+            <input type="checkbox" id="show-password"> {% translate 'Show Password' %}
+        </div>
         <button class="btn btn-primary">{% translate 'Log in' %}</button>
 
     </form>
@@ -28,5 +30,18 @@
             <a href="{% url 'accounts:resend_activation_code' %}">{% translate 'Resend an activation code' %}</a>
         </li>
     </ul>
+
+    <script>
+    document.getElementById('show-password').addEventListener('change', function() {
+        var passwordFields = document.querySelectorAll('input[type="password"]');
+        passwordFields.forEach(function(passwordField) {
+            if (this.checked) {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }, this);
+    });
+    </script>
 
 {% endblock content %}

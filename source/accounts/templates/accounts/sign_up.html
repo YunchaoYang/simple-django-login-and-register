@@ -7,23 +7,30 @@
     <h4>{% translate 'Create an account' %}</h4>
 
     <form method="post">
-
         {% csrf_token %}
         {% bootstrap_form form %}
+        <div class="mb-3">
+            <input type="checkbox" id="show-password"> {% translate 'Show Password' %}
+        </div>
         
-        <!-- Terms and Conditions Checkbox -->
-        <!-- <div class="form-group">
-            <div class="form-check">
-                {{ form.agree_to_terms }}
-                <label class="form-check-label">
-                    {% translate "I agree to the" %} 
-                    <a href="{% url 'accounts:terms' %}" target="_blank">{% translate "terms and conditions" %}</a>
-                </label>
-            </div>
+        <!-- <div>
+            <input type="checkbox" name="agree_to_terms" required> {% translate 'I agree to the' %} <a href="{% url 'accounts:terms' %}" target="_blank">{% translate 'terms and conditions' %}</a>
         </div> -->
 
         <button class="btn btn-success">{% translate 'Create' %}</button>
-
     </form>
+
+    <script>
+    document.getElementById('show-password').addEventListener('change', function() {
+        var passwordFields = document.querySelectorAll('input[type="password"]');
+        passwordFields.forEach(function(passwordField) {
+            if (this.checked) {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }, this);
+    });
+    </script>
 
 {% endblock content %}
